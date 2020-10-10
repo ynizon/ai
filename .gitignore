@@ -8,6 +8,7 @@
 .phpunit.result.cache
 Homestead.json
 google_key.json
+/config/*.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
