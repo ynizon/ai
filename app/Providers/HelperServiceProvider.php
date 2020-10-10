@@ -413,7 +413,6 @@ abstract class HelperServiceProvider extends ServiceProvider
 			$statuslabel = "disarmed";
 		}
 		
-		
 		/*
 		self::initAlarm($siteid,$token);
 		if ($token != "" and $siteid != ""){

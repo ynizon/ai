@@ -17,16 +17,65 @@ use App\Http\Controllers\SonosController;
 use DialogFlow\Client;
 use App\Providers\HelperServiceProvider;
 
+use Dialogflow\Action\Responses\MediaObject;
+use Dialogflow\Action\Responses\MediaResponse;
+use Dialogflow\Action\Responses\Suggestions;
+use Dialogflow\WebhookClient;
+
 class IaController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 	
 	// Renvoie les infos provenant de l'ia
 	public function ia(Request $request){		
+		$bModeEchoIA = true;
 		try {
-			
 			HelperServiceProvider::log();
-			$bModeEchoIA = true;
+			
+			/*
+			$json = json_decode(utf8_encode(file_get_contents('php://input')),true);
+			//$json = json_decode((file_get_contents('php://input')),true);
+			//$agent = new WebhookClient($json);
+			$agent = WebhookClient::fromData($json);
+			
+			$conv = $agent->getActionConversation();
+			$conv->ask('Here you go');
+			$conv->ask(
+				new MediaResponse(
+					MediaObject::create('http://storage.googleapis.com/automotive-media/Jazz_In_Paris.mp3')
+					->name('Jazz in Paris')
+					->description('A funky Jazz tune')
+					->icon('http://storage.googleapis.com/automotive-media/album_art.jpg')
+					->image('http://storage.googleapis.com/automotive-media/album_art.jpg')
+				)
+			);
+			//$conv->ask(new Suggestions(['Pause', 'Stop', 'Start over']));
+			// $agent->reply($conv);
+			exit();
+			*/
+			
+			
+			$question = $request->input("question");
+			$input_salle = $request->input("salle");
+			$update_response = file_get_contents("php://input");			
+			
+			HelperServiceProvider::log("");
+			$update = json_decode(($update_response), true);
+			if (empty($update)){
+				$update = json_decode(utf8_encode($update_response), true);//Test preprod				
+			}
+			
+			if (isset($update["queryResult"])) {
+				$bModeEchoIA = false;
+				$question = $update["queryResult"]["queryText"];
+				foreach (config("app.ROOMS") as $xip=>$salle){
+					$question = str_replace("dans la ".$salle,"",$question);
+					$question = str_replace("dans le ".$salle,"",$question);
+				}
+			}
+			
+			//echo $question;exit();
+			
 			if ($request->input("alarme") != ""){
 				if ($request->input("alarme") == "on"){
 					echo HelperServiceProvider::setAlarm("armed");
@@ -50,7 +99,7 @@ class IaController extends BaseController
 								
 			//$ip = "192.168.1.12";	
 			//$ip=SonosPHPController->get_room_coordinator("salle");
-			$question = $request->input("question");
+			
 			
 			//////////////////////////////////////////////////////////////////
 			//Provenance d'IFTT (Google Home)
@@ -83,22 +132,34 @@ class IaController extends BaseController
 				}
 				
 				$sBody = json_encode(HelperServiceProvider::utf8ize($x));
-				
-				//On force le salon
-				foreach (config("app.ROOMS") as $xip=>$salle){
-					if ($ip == ""){
-						$ip = $xip;
+			}
+			
+			//On recup la salle 
+			if (isset($update["queryResult"])) {
+				if (isset($update["queryResult"]["parameters"])) {
+					if (isset($update["queryResult"]["parameters"]["room"])) {
+						if (!empty($update["queryResult"]["parameters"]["room"])) {
+							$input_salle = $update["queryResult"]["parameters"]["room"];
+							
+						}
 					}
 				}
-				
-				//Si il y a le parametre, alors on prend la bonne salle
-				if ($request->input("salle") != ""){
-					foreach (config("app.ROOMS") as $xip=>$salle){
-						if (strtolower($salle) == strtolower($request->input("salle"))){
-							$ip = $xip;
-						}				
-					}
-				}				
+			}
+			
+			//On force le salon
+			foreach (config("app.ROOMS") as $xip=>$salle){
+				if ($ip == ""){
+					$ip = $xip;
+				}
+			}
+			
+			//Si il y a le parametre, alors on prend la bonne salle
+			if ($input_salle != ""){
+				foreach (config("app.ROOMS") as $xip=>$salle){
+					if (strtolower($salle) == strtolower($input_salle)){
+						$ip = $xip;
+					}				
+				}
 			}
 			
 			$sonos = new SonosPHPController($ip);
@@ -770,7 +831,7 @@ class IaController extends BaseController
 										$sReponse = "";
 										
 										//Ya til des favoris				
-										if (file_exists(config("app.MUSIC_FOLDER")."/".$sFolder."/".$song)){
+										if (file_exists(config("app.MUSIC_FOLDER")."/".$sFolder."/".$song)){											
 											if ($ip!="-"){
 												$sonos->SetPlayMode("SHUFFLE_NOREPEAT");//Pour les favoris, je preferes aleatoire
 												$sonos->AddURIToQueue("x-file-cifs:".HelperServiceProvider::charSonos(config("app.NAS_MUSIC_FOLDER")."/".$sFolder."/".$song));
@@ -800,7 +861,8 @@ class IaController extends BaseController
 												if ($bModeEchoIA){
 													$sReponse =  "OK, je vais jouer les favoris.";
 												}
-											}											
+											}	
+										
 										}else{
 											$tabReps = scandir(config("app.MUSIC_FOLDER")."/".$sFolder);					
 											$sTodo .= "oPlaylist = [";
@@ -970,5 +1032,45 @@ class IaController extends BaseController
 			return view ("ia",compact("sReponse","sLog","sTodo"));
 		}
 	}
-	
+
+	public function export_dialogflow(){
+		echo "Ajouter votre export dans le répertoire stockage/export, nous allons écraser les fichiers avec le contenu du répertoire musique ".config("app.MUSIC_FOLDER").". A vous de faire le réimport dans Dialogflow.";
+		$tabArtist = [];
+		$tabSongs = [];
+		$fArtist = storage_path()."/export/entities/artist_entries_fr.json";
+		$fSong = storage_path()."/export/entities/song_entries_fr.json";
+		
+		$artists = scandir(config("app.MUSIC_FOLDER"));
+		foreach ($artists as $artist){
+			if ($artist != "." and $artist != ".." ){
+				$tabArtist[] = ["value"=> $artist,"synonyms"=> [$artist]];
+				
+				if (is_dir(config("app.MUSIC_FOLDER")."/".$artist)){
+					$albums = scandir(config("app.MUSIC_FOLDER")."/".$artist);
+					foreach ($albums as $album){
+						if ($album != "." and $album != ".." ){
+							if (is_dir(config("app.MUSIC_FOLDER")."/".$artist."/".$album)){
+								$songs = scandir(config("app.MUSIC_FOLDER")."/".$artist."/".$album);
+								foreach ($songs as $song){
+									if ($song != "." and $song != ".." ){
+										$tabSongs[] = ["value"=> $song,"synonyms"=> [$song]];
+									}
+								}
+							}else{
+								$tabSongs[] = ["value"=> $album,"synonyms"=> [$album]];
+							}
+						}					
+					}
+				}
+			}
+		}
+		
+		$fpa = fopen($fArtist, "w+");
+		fputs ($fpa , json_encode($tabArtist));		
+		fclose($fpa);
+		
+		$fps = fopen($fSong, "w+");
+		fputs ($fps , json_encode($tabSongs));		
+		fclose($fps);
+	}
 }

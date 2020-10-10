@@ -21,6 +21,10 @@ use Google\Cloud\TextToSpeech\V1\SynthesisInput;
 use Google\Cloud\TextToSpeech\V1\TextToSpeechClient;
 use Google\Cloud\TextToSpeech\V1\VoiceSelectionParams;
 
+use Google_Client;
+use Google_Service_Calendar;
+use Google_Service_Calendar_Event;
+
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -365,5 +369,99 @@ class Controller extends BaseController
 			$sonos = new SonosPHPController($ip);
 			$sonos->SetVolume($volume);
 		}
+	}
+	
+	/* Dupliuqe un calendrier */
+	public function duplicateCalendar(){
+		// Get the API client and construct the service object.
+		//Retrieve first calendar
+		$calendarId = 'primary';
+		$client = $this->getClient(base_path() . "/config/token_ynizon.json");
+		$service = new Google_Service_Calendar($client);
+		$optParams = array(
+		  'maxResults' => 20,
+		  'orderBy' => 'startTime',
+		  'singleEvents' => true,
+		  'timeMin' => date('c'),
+		);
+		$results = $service->events->listEvents($calendarId, $optParams);
+		$events = $results->getItems();
+
+		//On supprime tous les events enregistrés
+		$client_dest = $this->getClient(base_path() . "/config/token_music.json");
+		$service_dest = new Google_Service_Calendar($client_dest);
+		$results_dest = $service_dest->events->listEvents($calendarId, $optParams);
+		$events_dest = $results_dest->getItems();
+		foreach ($events_dest as $event) {
+			$service_dest->events->delete($calendarId,$event->id);
+		}
+		//On rajoute ceux d'origine
+		foreach ($events as $event) {
+			$attributes = ['summary','location','start','end'];
+			$new_event = new Google_Service_Calendar_Event(array(
+			  'summary' => $event->getSummary(),
+			  'location' => $event->getLocation(),
+			  'description' => $event->getDescription(),
+			  'start' => $event->getStart(),
+			  'end' => $event->getEnd()
+			  )	
+			);
+			
+			$service_dest->events->insert($calendarId, $new_event);	
+			$date = $event->getStart()->getDate();
+			if ($date == ""){
+				$date = $event->getStart()->getDateTime();
+			}
+			echo  $date. " - ".$new_event->getSummary()."<br/>";
+		}
+	}
+	
+	private  function getClient($tokenPath = 'token.json')
+	{
+		$client = new Google_Client();
+		$client->setApplicationName('Google Calendar API PHP Quickstart');
+		$client->setScopes(Google_Service_Calendar::CALENDAR);
+		$client->setAuthConfig(base_path() . "/config/credentials.json");
+		$client->setAccessType('offline');
+		$client->setPrompt('select_account consent');
+
+		// Load previously authorized token from a file, if it exists.
+		// The file token.json stores the user's access and refresh tokens, and is
+		// created automatically when the authorization flow completes for the first
+		// time.
+		//$tokenPath = "";
+		if (file_exists($tokenPath)) {
+			$accessToken = json_decode(file_get_contents($tokenPath), true);
+			$client->setAccessToken($accessToken);
+		}
+
+		// If there is no previous token or it's expired.
+		if ($client->isAccessTokenExpired()) {
+			// Refresh the token if possible, else fetch a new one.
+			if ($client->getRefreshToken()) {
+				$client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
+			} else {
+				// Request authorization from the user.
+				$authUrl = $client->createAuthUrl();
+				printf("Open the following link in your browser:\n%s\n", $authUrl);
+				print 'Enter verification code: ';
+				$authCode = trim(fgets(STDIN));
+
+				// Exchange authorization code for an access token.
+				$accessToken = $client->fetchAccessTokenWithAuthCode($authCode);
+				$client->setAccessToken($accessToken);
+
+				// Check to see if there was an error.
+				if (array_key_exists('error', $accessToken)) {
+					throw new Exception(join(', ', $accessToken));
+				}
+			}
+			// Save the token to a file.
+			if (!file_exists(dirname($tokenPath))) {
+				mkdir(dirname($tokenPath), 0700, true);
+			}
+			file_put_contents($tokenPath, json_encode($client->getAccessToken()));
+		}
+		return $client;
 	}
 }
