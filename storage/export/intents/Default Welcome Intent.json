@@ -1,0 +1,42 @@
+{
+  "id": "a74b0d67-f960-4ebe-8182-4dba63a661d3",
+  "name": "Default Welcome Intent",
+  "auto": true,
+  "contexts": [],
+  "responses": [
+    {
+      "resetContexts": false,
+      "action": "input.welcome",
+      "affectedContexts": [],
+      "parameters": [],
+      "messages": [
+        {
+          "type": "0",
+          "title": "",
+          "textToSpeech": "",
+          "lang": "fr",
+          "speech": [
+            "Salut quel chanteur souhaitez vous écoutez ?",
+            "Bonjour quel artiste souhaitez vous écoutez ?",
+            "Salutations quel groupe souhaitez vous écoutez ?",
+            "Bienvenue que voulez vous écoutez ?"
+          ],
+          "condition": ""
+        }
+      ],
+      "speech": []
+    }
+  ],
+  "priority": 500000,
+  "webhookUsed": false,
+  "webhookForSlotFilling": false,
+  "fallbackIntent": false,
+  "events": [
+    {
+      "name": "WELCOME"
+    }
+  ],
+  "conditionalResponses": [],
+  "condition": "",
+  "conditionalFollowupEvents": []
+}

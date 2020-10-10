@@ -1,0 +1,20 @@
+[
+  {
+    "value": "cuisine",
+    "synonyms": [
+      "cuisine"
+    ]
+  },
+  {
+    "value": "salon",
+    "synonyms": [
+      "salon"
+    ]
+  },
+  {
+    "value": "chambre",
+    "synonyms": [
+      "chambre"
+    ]
+  }
+]

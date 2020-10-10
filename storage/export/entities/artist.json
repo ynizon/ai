@@ -1,0 +1,9 @@
+{
+  "id": "bebea1e8-1f63-41b6-a385-73265edbef53",
+  "name": "artist",
+  "isOverridable": true,
+  "isEnum": false,
+  "isRegexp": false,
+  "automatedExpansion": false,
+  "allowFuzzyExtraction": false
+}

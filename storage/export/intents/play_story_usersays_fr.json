@@ -1,0 +1,108 @@
+[
+  {
+    "id": "ab03f5e3-a867-4c15-9cc4-66004a68225e",
+    "data": [
+      {
+        "text": "raconte ",
+        "userDefined": false
+      },
+      {
+        "text": "moi",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " ",
+        "userDefined": false
+      },
+      {
+        "text": "tintin",
+        "meta": "@story",
+        "alias": "story",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "fr",
+    "updated": 0
+  },
+  {
+    "id": "d9337b3d-9c77-4123-9d63-50467dd07a2a",
+    "data": [
+      {
+        "text": "je voudrais écouter l\u0027histoire de ",
+        "userDefined": false
+      },
+      {
+        "text": "tintin",
+        "meta": "@story",
+        "alias": "story",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "fr",
+    "updated": 0
+  },
+  {
+    "id": "3c9278a9-f5c0-4f91-b494-f9a666449d5a",
+    "data": [
+      {
+        "text": "raconte ",
+        "userDefined": false
+      },
+      {
+        "text": "moi",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " l\u0027histoire de ",
+        "userDefined": false
+      },
+      {
+        "text": "tintin",
+        "meta": "@story",
+        "alias": "story",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "fr",
+    "updated": 0
+  },
+  {
+    "id": "3a788e7c-99ed-46e9-bb6d-fe6d90593959",
+    "data": [
+      {
+        "text": "raconte ",
+        "userDefined": false
+      },
+      {
+        "text": "moi",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " ",
+        "userDefined": false
+      },
+      {
+        "text": "une",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " histoire",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "fr",
+    "updated": 0
+  }
+]

@@ -1,0 +1,288 @@
+[
+  {
+    "id": "4b2eb534-67c2-4f6e-b252-5613a0f613fb",
+    "data": [
+      {
+        "text": "écouter ",
+        "userDefined": false
+      },
+      {
+        "text": "le déserteur",
+        "meta": "@song",
+        "alias": "song",
+        "userDefined": false
+      },
+      {
+        "text": " ",
+        "userDefined": false
+      },
+      {
+        "text": "de",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " ",
+        "userDefined": false
+      },
+      {
+        "text": "boris vian",
+        "meta": "@artist",
+        "alias": "artist",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "fr",
+    "updated": 0
+  },
+  {
+    "id": "57230ed9-8cdf-4a2a-9c1e-48865141f78c",
+    "data": [
+      {
+        "text": "écouter ",
+        "userDefined": false
+      },
+      {
+        "text": "Whirlpool",
+        "meta": "@song",
+        "alias": "song",
+        "userDefined": false
+      },
+      {
+        "text": " ",
+        "userDefined": false
+      },
+      {
+        "text": "de",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " ",
+        "userDefined": false
+      },
+      {
+        "text": "After Midnight",
+        "meta": "@artist",
+        "alias": "artist",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "fr",
+    "updated": 0
+  },
+  {
+    "id": "db1d68a2-ee89-422c-b0d4-e2f589e41566",
+    "data": [
+      {
+        "text": "écouter ",
+        "userDefined": false
+      },
+      {
+        "text": "C\u0027est quand le bonheur",
+        "meta": "@song",
+        "alias": "song",
+        "userDefined": false
+      },
+      {
+        "text": " ",
+        "userDefined": false
+      },
+      {
+        "text": "de",
+        "meta": "@sys.ignore",
+        "userDefined": false
+      },
+      {
+        "text": " ",
+        "userDefined": false
+      },
+      {
+        "text": "cali",
+        "meta": "@artist",
+        "alias": "artist",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 1,
+    "lang": "fr",
+    "updated": 0
+  },
+  {
+    "id": "835ca584-95ff-4590-ab2d-845e7d03bca1",
+    "data": [
+      {
+        "text": "écouter je l\u0027aime à mourir de ",
+        "userDefined": false
+      },
+      {
+        "text": "francis cabrel",
+        "meta": "@artist",
+        "alias": "artist",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "fr",
+    "updated": 0
+  },
+  {
+    "id": "046da2dc-7775-434e-ac49-20850689af8d",
+    "data": [
+      {
+        "text": "écouter ",
+        "userDefined": false
+      },
+      {
+        "text": "cali",
+        "meta": "@artist",
+        "alias": "artist",
+        "userDefined": false
+      },
+      {
+        "text": " dans le ",
+        "userDefined": false
+      },
+      {
+        "text": "salon",
+        "meta": "@room",
+        "alias": "room",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "fr",
+    "updated": 0
+  },
+  {
+    "id": "d17b4367-ae8b-4797-8ef0-a1339bb58a91",
+    "data": [
+      {
+        "text": "je voudrais écouter ",
+        "userDefined": false
+      },
+      {
+        "text": "cali",
+        "meta": "@artist",
+        "alias": "artist",
+        "userDefined": false
+      },
+      {
+        "text": " dans la ",
+        "userDefined": false
+      },
+      {
+        "text": "cuisine",
+        "meta": "@room",
+        "alias": "room",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "fr",
+    "updated": 0
+  },
+  {
+    "id": "7f98ac43-e133-4499-92d7-709b83002fba",
+    "data": [
+      {
+        "text": "je voudrais écouter ",
+        "userDefined": false
+      },
+      {
+        "text": "muse",
+        "meta": "@artist",
+        "alias": "artist",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 3,
+    "lang": "fr",
+    "updated": 0
+  },
+  {
+    "id": "0d33e5fc-1e65-4365-b14d-eb43f6057a51",
+    "data": [
+      {
+        "text": "je voudrais écouter ",
+        "userDefined": false
+      },
+      {
+        "text": "cali",
+        "meta": "@artist",
+        "alias": "artist",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 1,
+    "lang": "fr",
+    "updated": 0
+  },
+  {
+    "id": "c292e981-6923-46f9-97f9-320aa5d2ce21",
+    "data": [
+      {
+        "text": "je voudrais écouter ",
+        "userDefined": false
+      },
+      {
+        "text": "nightwish",
+        "meta": "@artist",
+        "alias": "artist",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "fr",
+    "updated": 0
+  },
+  {
+    "id": "21296418-384d-4db6-a48b-c41630505a88",
+    "data": [
+      {
+        "text": "j\u0027aimerais écouter ",
+        "userDefined": false
+      },
+      {
+        "text": "acdc",
+        "meta": "@artist",
+        "alias": "artist",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "fr",
+    "updated": 0
+  },
+  {
+    "id": "45f64755-eb1c-45f0-b580-57b7a8139b54",
+    "data": [
+      {
+        "text": "j\u0027aimerais écouter ",
+        "userDefined": false
+      },
+      {
+        "text": "johnny",
+        "meta": "@artist",
+        "alias": "artist",
+        "userDefined": true
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "fr",
+    "updated": 0
+  }
+]

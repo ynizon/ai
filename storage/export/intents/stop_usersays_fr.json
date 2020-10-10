@@ -1,0 +1,28 @@
+[
+  {
+    "id": "dcf8658b-ba6b-4281-b8f7-2163b0cfaa65",
+    "data": [
+      {
+        "text": "arrete",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 1,
+    "lang": "fr",
+    "updated": 0
+  },
+  {
+    "id": "a76c4e82-ec4b-499d-98e4-2359395cfc16",
+    "data": [
+      {
+        "text": "stop",
+        "userDefined": false
+      }
+    ],
+    "isTemplate": false,
+    "count": 0,
+    "lang": "fr",
+    "updated": 0
+  }
+]
