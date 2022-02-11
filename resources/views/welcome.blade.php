@@ -6,13 +6,13 @@
 
         <title><?php echo config("app.name");?></title>
 	    <!-- CSRF Token -->
-		<meta name="csrf-token" content="{{ csrf_token() }}"> 
-		
+		<meta name="csrf-token" content="{{ csrf_token() }}">
+
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
-		
+
 		<link href="/fontawesome/css/all.css" rel="stylesheet">
-  
+
         <!-- Styles -->
         <style>
             html, body {
@@ -25,7 +25,7 @@
             }
 
             .full-height {
-                height: 100vh;
+                /*height: 100vh;*/
             }
 
             .flex-center {
@@ -66,29 +66,66 @@
                 margin-bottom: 30px;
             }
         </style>
-		
+
 		<link href="/css/jplayer.blue.monday.min.css" rel="stylesheet" type="text/css" />
-						
+
 		<style type="text/css">
 			body { width: 500px; margin: 0 auto; text-align: center; margin-top: 20px; }
 			input { width: 400px; }
 			button { width: 50px; }
 			textarea { width: 100%; }
+
+			@media (prefers-color-scheme: dark) {
+				html, body {
+					background-color: #111;
+					background: #212121 !important;
+					color: #ededed;
+					color-alpha: #50a8d8;
+				}
+				.jp-interface {
+					background: #eee !important;
+				}
+				.jp-details, .jp-playlist {
+					background: #ccc !important;
+				}
+
+				.jp-playlist a{
+					color : #000;
+				}
+				div.jp-type-playlist div.jp-playlist a.jp-playlist-current{
+					color : #000 !important;
+				}
+
+				a.jp-playlist-item{
+					color : #000 !important;
+				}
+			}
 		</style>
-		
-		<script src="/js/jquery.min.js"></script>						
+		<script src="/js/jquery.min.js"></script>
 		<script type="text/javascript" src="/js/jquery.jplayer.min.js"></script>
 		<script type="text/javascript" src="/js/jplayer.playlist.min.js"></script>
-		
+
 		<script type="text/javascript">
 			$(document).ready(function() {
 				$.ajaxSetup({
 					headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
 				});
+                loadDirectories("");
 			});
+
+            function loadDirectories(dir){
+                $.get( "/explorer",
+                    { dir: dir })
+                    .done(function( data ) {
+                        $("#directories").html(data);
+                    }
+                );
+            }
+
+
 			var accessToken = "<?php echo config('app.ACCESS_TOKEN');?>";
 			var baseUrl = "https://api.dialogflow.com/v1/";
-			
+
 			$(document).ready(function() {
 				$("#input").keypress(function(event) {
 					if (event.which == 13) {
@@ -110,11 +147,11 @@
 					startRecognition();
 					<?php
 				}
-				?>				
+				?>
 			});
 			var recognition;
 			function startRecognition() {
-				
+
 				recognition = new webkitSpeechRecognition();
 				recognition.onstart = function(event) {
 					updateRec();
@@ -133,7 +170,7 @@
 				recognition.lang = "fr-FR";
 				recognition.start();
 			}
-		
+
 			function stopRecognition() {
 				if (recognition) {
 					recognition.stop();
@@ -189,7 +226,7 @@
 					}
 				}
 			}
-			
+
 			function sendText() {
 				var text = encodeURIComponent($("#input").val());
 				setLog("Loading...");
@@ -199,19 +236,19 @@
 					prepareResponse();
 				 });
 			}
-			
+
 			function setLog(val) {
 				$("#log").val(val);
 			}
-			
+
 			function prepareResponse() {
 			  var val = $("#response").val();
 			  if (val !== "") {
 				var msg = new SpeechSynthesisUtterance();
-				var voices = window.speechSynthesis.getVoices();				
+				var voices = window.speechSynthesis.getVoices();
 				for (var i = 0; i < voices.length; i++) {
 					if (voices[i].lang == "fr-FR"){
-						msg.voice = voices[i];		
+						msg.voice = voices[i];
 					}
 				}
 
@@ -219,19 +256,19 @@
 				window.speechSynthesis.speak(msg);
 			  }
 			}
-			
+
 			//On demarre la reconnaissance vocale
 			$(document).ready(function(){
 				//switchRecognition();
 			});
-		
+
 			var oPlaylist = [];
 			var mPlayer = null;
 			$(document).ready(function(){
 				mPlayer = new jPlayerPlaylist({
 					jPlayer: "#jquery_jplayer_1",
 					cssSelectorAncestor: "#jp_container_1"
-				},  
+				},
 					oPlaylist
 				, {
 					playlistOptions: {
@@ -244,10 +281,10 @@
 					useStateClassSkin: true,
 					autoBlur: false,
 					smoothPlayBar: true,
-					keyEnabled: true					
+					keyEnabled: true
 				});
 
-			});			
+			});
 			</script>
     </head>
     <body>
@@ -282,27 +319,30 @@
 				//echo $s;
 				//exit();
 				?>
-				
-						
-					
+
+
+
 				<div>
 					<form action="/tts">
 						<input id="input" type="text" name="txt" value="<?php if ($radio!= ""){echo "écouter la radio ".$radio;}?><?php if ($artist!= ""){echo "écouter ".$artist;}?>">
-						<i class="fas fa-microphone" id="rec"></i><br/>
-						
-						
+						<i class="fas fa-microphone" id="rec"></i><br/><br/>
+
+
 						<select name="ip" id="ip">
-							<option <?php if($salle=="-"){echo "selected";} ?> value="-">Local</option>	
+							<option <?php if($salle=="-"){echo "selected";} ?> value="-">Local</option>
 							<?php
 							foreach (config("app.ROOMS") as $ip_salle=>$name_salle){
 								?>
 								<option <?php if($salle==$name_salle){echo "selected";} ?> value="<?php echo $ip_salle;?>"><?php echo $name_salle;?></option>
 								<?php
 							}
-							?>				
+							?>
 						</select>
 						&nbsp;<input type="submit" style="width:50px" value="TTS"/>
 					</form>
+					<br/><button is='google-cast-button' id='google-cast-button' style='width:40px'></button>
+					&nbsp;&nbsp;<a href="/restartNasHdmi" style="color:#fff">HDMI Restart</a>
+
 					<div style="padding:25px">
 						<div id="jquery_jplayer_1" class="jp-jplayer"></div>
 							<div id="jp_container_1" class="jp-audio" role="application" aria-label="media player">
@@ -347,11 +387,11 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<br>Response<br> <textarea id="response" cols="4" rows="2"></textarea>
 						<br>LOG<br> <textarea id="log" cols="40" rows="2"></textarea>
-						
-						<br/>		
+
+						<br/>
 						<p>Prends ton micro casque et demande moi :
 							<ul>
 								<li>une opération mathématique</li>
@@ -361,9 +401,181 @@
 								<li>de regarder la série W saison X épisode Y</li>
 							</ul>
 						</p>
+
+                        <div id="directories" style="text-align: left;border:1px solid #cccccc;padding-top:10px;">
+                        </div>
 					</div>
 				</div>
             </div>
         </div>
+
+		<script src='https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1'></script>
+		<script>
+            function lanceExplorer(){
+                $("#response").val("");
+                $("#log").val("");
+                eval(document.getElementById('explorer_mp3').value);
+                mPlayer.setPlaylist(oPlaylist);
+                mPlayer.play();
+            }
+
+			//Chromecast
+			var castSession;
+			var media;
+			var request;
+			window.__onGCastApiAvailable = function(isAvailable){
+				if(! isAvailable){
+					return false;
+				}
+
+				var castContext = cast.framework.CastContext.getInstance();
+
+				castContext.setOptions({
+					autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED,
+					receiverApplicationId: chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID
+				});
+
+
+				var stateChanged = cast.framework.CastContextEventType.CAST_STATE_CHANGED;
+				castContext.addEventListener(stateChanged, function(event){
+					console.log(event);
+					castSession = castContext.getCurrentSession();
+					if (event.castState == 'CONNECTED'){
+						$("#jquery_jplayer_1").jPlayer("mute", true);
+						mPlayer.play();
+						goCast();
+						
+						//Test de cette ligne
+						window.setTimeout(function(){$(".jp-playlist-current").click();}, 2000);
+						
+						$('#google-cast-button').css('backgroundColor','#ccc');
+					}
+					if (event.castState == 'DISCONNECTED'){
+						$('#google-cast-button').css('backgroundColor','#f00');
+					}
+				});
+			};
+
+			//A chaque chanson, on la cast
+
+			$('#jquery_jplayer_1').bind($.jPlayer.event.play, function(event) {
+				if (castSession){
+					goCast();
+					/*
+					if (pause){
+						let playrequest = new chrome.cast.media.PlayRequest();
+						request = new chrome.cast.media.LoadRequest(playrequest);
+						pause = false;
+						castSession.loadMedia(request, onLoadSuccess, onLoadError);
+					}else{
+						goCast();
+					}
+					*/
+				}
+			});
+
+			//On pause aussi le cast
+			/*
+			var pause = false;
+			$('#jquery_jplayer_1').bind($.jPlayer.event.pause, function(event) {
+				if (castSession){
+					let pauserequest = new chrome.cast.media.PauseRequest();
+					request = new chrome.cast.media.LoadRequest(pauserequest);
+					pause = true;
+					castSession.loadMedia(request, onLoadSuccess, onLoadError);
+				}
+			});
+			*/
+
+
+
+			//Envoi le son sur le chromecast
+			function goCast(){
+
+				/*
+				//Playlist
+				var items = [];
+				var k = 0;
+				while (k < mPlayer.playlist.length){
+					media = new chrome.cast.media.MediaInfo(mPlayer.playlist[k]['mp3'], 'audio/mp3');
+					media.metadata = new chrome.cast.media.MusicTrackMediaMetadata();
+					var titles = mPlayer.playlist[k]['title'].split('>');
+					media.metadata.title = titles[0];
+					media.metadata.artist = titles[1];
+					//im = chrome.cast.Image('http://m1.behance.net/rendition/modules/575407/disp/822271229466847.png');
+					//media.metadata.images = new Array(im);
+					var item = new chrome.cast.media.QueueItem(media);
+
+					items.push(item);
+					k++;
+				}
+
+				request = new chrome.cast.media.QueueLoadRequest(items);
+				castSession && castSession.getSessionObj().queueLoad(request);
+				*/
+
+				//1 par 1
+				if (mPlayer.playlist.length > 0){
+                    media = new chrome.cast.media.MediaInfo(mPlayer.playlist[mPlayer.current]['mp3'], 'audio/mp3');
+                    //media = new chrome.cast.media.MediaInfo('https://file-examples-com.github.io/uploads/2017/11/file_example_MP3_700KB.mp3', 'audio/mp3');
+                    //media = new chrome.cast.media.MediaInfo('http://home.gameandme.fr/mp3test', 'audio/mp3');
+                    //media = new chrome.cast.media.MediaInfo('http://chiens.gameandme.fr/coco.mp3', 'audio/mp3');
+                    /*
+
+                    if (window.confirm("ccc")){
+                        media = new chrome.cast.media.MediaInfo('https://home.gameandme.fr/mp3test', 'audio/mp3');
+                    }*/
+
+                    media.metadata = new chrome.cast.media.MusicTrackMediaMetadata();
+                    var titles = mPlayer.playlist[mPlayer.current]['title'].split('>');
+                    media.metadata.title = titles[0];
+                    media.metadata.artist = titles[1];
+                    //im = chrome.cast.Image('http://m1.behance.net/rendition/modules/575407/disp/822271229466847.png');
+                    //media.metadata.images = new Array(im);
+                    request = new chrome.cast.media.LoadRequest(media);
+
+                    castSession.loadMedia(request, onLoadSuccess, onLoadError);
+
+                    /*
+                    //A tester ca: si ca marche mieux
+                    const sessionObj = await castSession.getSessionObj();
+                    await (new Promise((res) => {
+                        sessionObj.loadMedia(request, res);
+                    }));
+                    */
+
+
+                }
+			}
+
+			function castPicture(){
+				var mediaInfo = new chrome.cast.media.MediaInfo('http://i.imgur.com/IFD14.jpg', 'image/jpg');
+
+				var request = new chrome.cast.media.LoadRequest(mediaInfo);
+				request.autoplay = true;
+
+				castSession.loadMedia(request, onLoadSuccess, onLoadError);
+
+			}
+
+			function castVideo(){
+				//var mediaInfo = new chrome.cast.media.MediaInfo('http://i.imgur.com/IFD14.jpg', 'image/jpg');
+				var mediaInfo = new chrome.cast.media.MediaInfo('https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4', 'video/mp4');
+
+				var request = new chrome.cast.media.LoadRequest(mediaInfo);
+				request.autoplay = true;
+
+				castSession.loadMedia(request, onLoadSuccess, onLoadError);
+
+			}
+
+			function onLoadSuccess() {
+				console.log('Success.');
+			}
+
+			function onLoadError() {
+				console.log('Failed.');
+			}
+		</script>
     </body>
 </html>

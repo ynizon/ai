@@ -23,5 +23,8 @@ Route::get("/tts","Controller@tts");
 Route::post("/ia","IaController@ia");
 Route::get("/ia","IaController@ia");
 Route::get("/bus/{id}","Controller@bus");
+Route::get("/radio","Controller@radio");
 Route::get("/meteo/{id}","Controller@meteo");
 Route::get("/sonosvolume/{volume}","Controller@sonosVolume");
+Route::get("/calendar","Controller@duplicateCalendar");
+Route::get("/export_dialogflow","IaController@export_dialogflow");

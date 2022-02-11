@@ -37,18 +37,19 @@ class youtube extends Command
      * @return mixed
      */
     public function handle()
-    {		
+    {
         $file = storage_path()."/tmp.mp3";
 		if (file_exists($file)){
 			unlink($file);
 		}
-		
+
 		$id = $this->argument('id');
 		if ($id != ""){
-			$cmd= 'youtube-dl --add-metadata --extract-audio -o "'.storage_path().'/tmp.%(ext)s" --audio-format mp3 https://www.youtube.com/watch?v='.$id;
+		    $url = 'https://www.youtube.com/watch?v='.$id;
+            $cmd = 'youtube-dl --prefer-ffmpeg --ffmpeg-location /opt/ffmpeg/ffmpeg --output "'.storage_path().'/tmp.%(ext)s" --extract-audio --audio-format mp3 '.$url;
 			$log = exec($cmd);
 			//echo $log;
 			$this->info("Fichier téléchargé");
 		}
-	}	
+	}
 }

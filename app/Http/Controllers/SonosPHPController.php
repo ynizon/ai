@@ -56,7 +56,7 @@ class SonosPHPController
 		preg_match('/\<'.$pattern.'\>(.+)\<\/'.$pattern.'\>/',$subject,$matches); ///'/\<'.$pattern.'\>(.+)\<\/'.$pattern.'\>/'
 		return $matches[1];
 	}
-	
+
 	/**
 	* Play
 	*/
@@ -340,7 +340,7 @@ class SonosPHPController
 	* Get Transport Settings : get PlayMode about player
 	******************************************************************************/
 	public function GetPlayMode()	{
-		
+
 		$url = '/MediaRenderer/AVTransport/Control';
 		$action = 'GetTransportSettings';
 		$service = 'urn:schemas-upnp-org:service:AVTransport:1';
@@ -353,14 +353,14 @@ class SonosPHPController
 	* Set Transport Settings : set PlayMode about player (NORMAL , REPEAT_ALL, SHUFFLE , SHUFFLE_NOREPEAT)
 	******************************************************************************/
 	public function SetPlayMode($playmode="NORMAL")	{
-		
+
 		$url = '/MediaRenderer/AVTransport/Control';
 		$action = 'SetPlayMode';
 		$service = 'urn:schemas-upnp-org:service:AVTransport:1';
 		$args = '<InstanceID>0</InstanceID><NewPlayMode>'.$playmode.'</NewPlayMode>';
 		return $this->Upnp($url,$service,$action,$args);
 	}
-	
+
 	/**
 	* Split string in several strings
 	*
@@ -425,7 +425,7 @@ class SonosPHPController
 				$this->SetVolume($volume);
 		}catch(\Exception $e){
 			//Nothing to do
-		}		
+		}
 
 		//$file = 'x-file-cifs://'.$directory.'/file.mp3';
 
@@ -465,7 +465,7 @@ class SonosPHPController
 			$this->Play();
 		return true;
 	}
-	
+
 	/**
 	* Play a TTS message
 	* @param string message
