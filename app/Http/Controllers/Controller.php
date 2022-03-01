@@ -809,49 +809,49 @@ $filenames[] =  'BANJO1.mp3';
         $root = "";
         $dir = $request->input("dir");
         $dir = str_replace("../","",$dir);
-        
+
         if ($dir == ".." or $dir == "."){
             $dir = "";
         }
         if (!empty($dir)){
             $root .= urldecode($dir)."/";
         }
-        
+
         $dirsTmpNotOrder = scandir(config("app.MUSIC_FOLDER")."/".$root);
 
         $nbmp3 = 0;
         $dirs = [];
-		
-		
+
+
 		$dirsTmp = [];
 		foreach ($dirsTmpNotOrder as $file){
 			if (stripos($file,".txt") === false) {
                 $fileTmp = str_replace("-"," ",$file);
                 $fileTmp = str_replace("_"," ",$file);
-                $keys = explode(" ",$fileTmp );                
-                
+                $keys = explode(" ",$fileTmp );
+
                 if (is_dir(config("app.MUSIC_FOLDER")."/".$root."/".$file)){
                     $dirsTmp[$file] = $file;
                 }else{
                     $numKey = 0;
-                    
+
                     foreach ($keys as $idx => $key){
                         if ((int) $key >0){
                             $numKey = $idx;
                         }
                     }
-                    
+
                     if (isset($keys[$numKey])){
                         $dirsTmp[$keys[$numKey]] = $file;
                     }else{
                         $dirsTmp[$file] = $file;
-                    }                    
+                    }
                 }
             }
-		}		
+		}
 
-		ksort($dirsTmp);		
-		
+		ksort($dirsTmp);
+
         foreach ($dirsTmp as $dir){
             if ($dir == "..") {
                 $path = explode("/", $root);
@@ -876,6 +876,21 @@ $filenames[] =  'BANJO1.mp3';
                             $icon = "file";
                             $nbmp3++;
                             $dirs[$root . $dir] = ["dir" => $dir, "icon" => $icon];
+                        }
+                        if (stripos($dir,".m3u") !== false) {
+                            $icon = "heart";
+                            $nbmp3++;
+                            $files = explode("\r\n",file_get_contents(config("app.MUSIC_FOLDER")."/".$root."/".$dir));
+                            $filesOK = [];
+                            foreach ($files as $file){
+                                if (stripos($file, "#") === false) {
+                                    $file = str_replace("\\","/",$file);
+                                    if ($file != ''){
+                                        $filesOK[] = ["dir" => $file, "path"=>urldecode($root.$file)];
+                                    }
+                                }
+                            }
+                            $dirs[$root . $dir] = ["dir" => $dir, "icon" => $icon, "files"=>$filesOK];
                         }
                     }
                 }

@@ -411,10 +411,10 @@
 
 		<script src='https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1'></script>
 		<script>
-            function lanceExplorer(){
+            function lanceExplorer(heart){
                 $("#response").val("");
                 $("#log").val("");
-                eval(document.getElementById('explorer_mp3').value);
+                eval(document.getElementById('explorer_mp3'+heart).value);
                 mPlayer.setPlaylist(oPlaylist);
                 mPlayer.play();
             }
@@ -444,10 +444,10 @@
 						$("#jquery_jplayer_1").jPlayer("mute", true);
 						mPlayer.play();
 						goCast();
-						
+
 						//Test de cette ligne
 						window.setTimeout(function(){$(".jp-playlist-current").click();}, 2000);
-						
+
 						$('#google-cast-button').css('backgroundColor','#ccc');
 					}
 					if (event.castState == 'DISCONNECTED'){

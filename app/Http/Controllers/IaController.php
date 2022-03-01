@@ -403,7 +403,7 @@ class IaController extends BaseController
 							}
                         }
 					}
-					
+
 					if (stripos($query,"je voudrais voir")!==false){
 						$x["result"]["action"] = "movie.start";
 						$x["result"]["contexts"] = [];
@@ -977,7 +977,7 @@ class IaController extends BaseController
 								}
 
 								$files = $this->lookFor($artist, $song, $album);
-								
+
 								if ($ip!="-"){
 								    if ($ip == "google") {
 								        //Google home standard
@@ -1081,6 +1081,7 @@ class IaController extends BaseController
 								        //Sonos
                                         $sonos->SetPlayMode("NORMAL");
                                         $sonos->RemoveAllTracksFromQueue();
+
                                         foreach ($files as $file) {
                                             $sonos->AddURIToQueue("x-file-cifs:" . HelperServiceProvider::charSonos(config("app.NAS_MUSIC_FOLDER") . '/' . $file));
                                         }
@@ -1283,10 +1284,10 @@ class IaController extends BaseController
 				    if (strtolower(HelperServiceProvider::sRep($artist)) == strtolower(HelperServiceProvider::sRep($sDir))){
 						$sFolder = $sDir;
 					}
-										
+
                     $percent = similar_text($artist, $sDir, $percent);
                     $similars[$sDir] = $percent;
-					
+
 				}
 
 				//On prend ce qui s'en rapproche le plus
@@ -1300,7 +1301,7 @@ class IaController extends BaseController
 			$allFiles = [] ;
 			if (!file_exists(config("app.MUSIC_FOLDER")."/".$sFolder) or !empty($song) or empty($sFolder)){
 				if (!empty($song)) {
-				    //Si c est une chanson					
+				    //Si c est une chanson
 					$songs = Song::where("name","like","%".$song."%")->orderBy("filename")->get();
 					foreach ($songs as $mysong){
                         $allFiles[] = substr(str_ireplace(config("app.MUSIC_FOLDER"),"",$mysong->directory),1).'/'.$mysong->filename;
